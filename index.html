@@ -1,0 +1,691 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محاسبه‌گر عطر</title>
+
+<style>
+@font-face {
+    font-family: Hasti;
+    src: url("Hasti.woff2") format("woff2");
+}
+
+:root {
+    --bg: #f7f6fc;
+    --card: #ffffff;
+    --text: #242136;
+    --muted: #89869b;
+    --purple: #8265df;
+    --purple-light: #eee9ff;
+    --pink: #ffeaf2;
+    --border: #eeebf4;
+    --green: #168b68;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 30px 18px;
+    background:
+        radial-gradient(circle at 5% 5%, #eee7ff 0, transparent 28%),
+        radial-gradient(circle at 95% 20%, #ffeaf2 0, transparent 25%),
+        var(--bg);
+    color: var(--text);
+    font-family: Hasti, Tahoma, sans-serif;
+}
+
+.container {
+    max-width: 1050px;
+    margin: auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.logo {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 14px;
+    background: var(--purple-light);
+    color: var(--purple);
+    border-radius: 20px;
+    font-size: 27px;
+}
+
+header h1 {
+    font-size: 29px;
+    margin: 0 0 8px;
+}
+
+header p {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+button {
+    border: none;
+    border-radius: 12px;
+    padding: 12px 18px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    transition: .2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    filter: brightness(.97);
+}
+
+.add-btn {
+    background: var(--purple);
+    color: white;
+    box-shadow: 0 5px 15px #8265df35;
+}
+
+.copy-btn {
+    background: var(--purple-light);
+    color: #7053c9;
+}
+
+.delete-btn {
+    background: #fff0f1;
+    color: #e05269;
+}
+
+.round-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 13px;
+}
+
+.round-box input {
+    accent-color: var(--purple);
+    width: 17px;
+    height: 17px;
+}
+
+.perfume-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 30px #30205a08;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.card-header h2 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.card-header h2 span {
+    color: var(--purple);
+}
+
+.inputs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.field label {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 13px;
+    background: #faf9fd;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: .2s;
+}
+
+input:focus {
+    border-color: var(--purple);
+    background: white;
+    box-shadow: 0 0 0 3px #8265df15;
+}
+
+.results {
+    margin-top: 25px;
+}
+
+.results h3 {
+    font-size: 16px;
+    margin-bottom: 14px;
+}
+
+.price-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.price-item {
+    background: #faf9fd;
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    padding: 16px;
+    transition: .2s;
+}
+
+.price-item:hover {
+    border-color: #cfc2fa;
+    transform: translateY(-2px);
+}
+
+.price-item strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 12px;
+    color: var(--purple);
+}
+
+.price-item .price {
+    font-size: 17px;
+    font-weight: bold;
+    direction: ltr;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.old-price {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.8;
+}
+
+.price-item button {
+    width: 100%;
+    margin-top: 9px;
+    padding: 9px;
+    font-size: 12px;
+}
+
+.card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 18px;
+}
+
+.formula {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 22px;
+    margin-top: 28px;
+    line-height: 2;
+}
+
+.formula h3 {
+    margin-top: 0;
+    font-size: 17px;
+}
+
+.formula p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.formula table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 13px;
+}
+
+.formula td,
+.formula th {
+    border-bottom: 1px solid var(--border);
+    padding: 12px 8px;
+    text-align: center;
+}
+
+.formula th {
+    background: #f7f5fc;
+    color: var(--purple);
+}
+
+.footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 25px;
+}
+
+@media(max-width:650px) {
+    body {
+        padding: 22px 12px;
+    }
+
+    header h1 {
+        font-size: 24px;
+    }
+
+    .inputs {
+        grid-template-columns: 1fr;
+    }
+
+    .price-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 9px;
+    }
+
+    .perfume-card {
+        padding: 15px;
+        border-radius: 18px;
+    }
+
+    .price-item {
+        padding: 12px;
+    }
+
+    .price-item .price {
+        font-size: 14px;
+    }
+
+    .card-header h2 {
+        font-size: 15px;
+    }
+
+    .toolbar {
+        align-items: stretch;
+    }
+
+    .add-btn {
+        flex: 1;
+    }
+
+    .round-box {
+        justify-content: center;
+    }
+}
+
+@media(max-width:370px) {
+    .price-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+    <div class="logo">✦</div>
+    <h1>محاسبه‌گر عطر</h1>
+    <p>قیمت‌گذاری سریع و هوشمند عطر در حجم‌های مختلف</p>
+</header>
+
+<div class="toolbar">
+
+    <button class="add-btn" onclick="addPerfume()">
+        + افزودن عطر جدید
+    </button>
+
+    <label class="round-box">
+        <input type="checkbox" id="rounding"
+        onchange="calculateAll()">
+        گرد کردن قیمت به هزار تومان
+    </label>
+
+</div>
+
+<div id="perfumes"></div>
+
+<div class="formula">
+
+    <h3>✦ فرمول محاسبه قیمت</h3>
+
+    <div>
+        (عدد ورودی × ضریب حجم شیشه + قیمت شیشه) × ضریب عدد
+    </div>
+
+    <p>تمام مبالغ داخلی بر حسب هزار تومان هستند.</p>
+
+    <table>
+        <tr>
+            <th>حجم</th>
+            <th>ضریب حجم</th>
+            <th>قیمت شیشه</th>
+        </tr>
+        <tr><td>10 میل</td><td>3</td><td>100</td></tr>
+        <tr><td>15 میل</td><td>5</td><td>120</td></tr>
+        <tr><td>20 میل</td><td>7</td><td>150</td></tr>
+        <tr><td>30 میل</td><td>10</td><td>200</td></tr>
+        <tr><td>50 میل</td><td>17</td><td>360</td></tr>
+        <tr><td>100 میل</td><td>34</td><td>400</td></tr>
+    </table>
+
+    <h3 style="margin-top:25px">✦ جدول ضرایب عدد ورودی</h3>
+
+    <table>
+        <tr>
+            <th>عدد ورودی</th>
+            <th>ضریب</th>
+        </tr>
+        <tr><td>0 تا 16</td><td>5</td></tr>
+        <tr><td>17 تا 26</td><td>4</td></tr>
+        <tr><td>27 تا 44</td><td>3</td></tr>
+        <tr><td>45 به بالا</td><td>2.5</td></tr>
+    </table>
+
+</div>
+
+<div class="footer">
+    محاسبه‌گر عطر ✦ طراحی مینیمال
+</div>
+
+</div>
+
+<script>
+
+const sizes = [
+    {ml: 10, factor: 3, bottle: 100},
+    {ml: 15, factor: 5, bottle: 120},
+    {ml: 20, factor: 7, bottle: 150},
+    {ml: 30, factor: 10, bottle: 200},
+    {ml: 50, factor: 17, bottle: 360},
+    {ml: 100, factor: 34, bottle: 400}
+];
+
+let perfumeCounter = 0;
+
+function getPerfumeFactor(number) {
+    if (number <= 16) return 5;
+    if (number <= 26) return 4;
+    if (number <= 44) return 3;
+    return 2.5;
+}
+
+function formatNumber(number) {
+    return Math.round(number).toLocaleString("en-US");
+}
+
+function addPerfume() {
+
+    perfumeCounter++;
+
+    const id = perfumeCounter;
+
+    const card = document.createElement("div");
+    card.className = "perfume-card";
+    card.id = "perfume-" + id;
+
+    card.innerHTML = `
+        <div class="card-header">
+            <h2>عطر <span>شماره ${id}</span></h2>
+
+            <button class="delete-btn"
+            onclick="removePerfume(${id})">
+                حذف عطر
+            </button>
+        </div>
+
+        <div class="inputs">
+
+            <div class="field">
+                <label>نام عطر</label>
+                <input type="text" class="perfume-name"
+                placeholder="مثلاً ساواج">
+            </div>
+
+            <div class="field">
+                <label>عدد ورودی</label>
+                <input type="number" class="perfume-number"
+                min="0" placeholder="عدد را وارد کنید"
+                oninput="calculateAll()">
+            </div>
+
+            <div class="field">
+                <label>درصد تخفیف</label>
+                <input type="number" class="perfume-discount"
+                min="0" max="99" value="0"
+                oninput="calculateAll()">
+            </div>
+
+        </div>
+
+        <div class="results">
+            <h3>قیمت نهایی در حجم‌های مختلف</h3>
+            <div class="price-grid"></div>
+        </div>
+
+        <div class="card-actions">
+
+            <button class="copy-btn"
+            onclick="copyAll(${id}, 'sale')">
+                کپی تمام قیمت‌ها
+            </button>
+
+            <button class="copy-btn"
+            onclick="copyAll(${id}, 'old')">
+                کپی قیمت‌های قبل تخفیف
+            </button>
+
+        </div>
+    `;
+
+    document.getElementById("perfumes").appendChild(card);
+
+    calculateAll();
+}
+
+function removePerfume(id) {
+    const card = document.getElementById("perfume-" + id);
+    if (card) card.remove();
+}
+
+// محاسبه قیمت بدون 20 درصد و بدون 50 هزار تومان اضافه
+
+function calculatePrice(number, size) {
+
+    const perfumeFactor = getPerfumeFactor(number);
+
+    let price = (
+        (number * size.factor + size.bottle)
+        * perfumeFactor
+    );
+
+    return price * 1000;
+}
+
+function calculateAll() {
+
+    const cards = document.querySelectorAll(".perfume-card");
+    const round = document.getElementById("rounding").checked;
+
+    cards.forEach(card => {
+
+        const numberInput = card.querySelector(".perfume-number");
+        const number = Number(numberInput.value);
+
+        const discount = Math.min(99, Math.max(0, Number(
+            card.querySelector(".perfume-discount").value
+        ) || 0));
+
+        const grid = card.querySelector(".price-grid");
+
+        if (numberInput.value === "" || number < 0) {
+
+            grid.innerHTML = `
+                <p style="color:#89869b;grid-column:1/-1">
+                    عدد ورودی را وارد کنید تا قیمت‌ها محاسبه شوند.
+                </p>
+            `;
+
+            return;
+        }
+
+        grid.innerHTML = "";
+
+        sizes.forEach(size => {
+
+            let salePrice = calculatePrice(number, size);
+
+            if (round) {
+                salePrice = Math.round(salePrice / 1000) * 1000;
+            }
+
+            const oldPrice = discount > 0
+                ? salePrice / (1 - discount / 100)
+                : salePrice;
+
+            const oldRounded = round
+                ? Math.round(oldPrice / 1000) * 1000
+                : oldPrice;
+
+            const item = document.createElement("div");
+            item.className = "price-item";
+
+            item.innerHTML = `
+                <strong>${size.ml} میل</strong>
+
+                <div class="price">
+                    ${formatNumber(salePrice)} تومان
+                </div>
+
+                <div class="old-price">
+                    قبل از تخفیف:
+                    ${formatNumber(oldRounded)} تومان
+                </div>
+
+                <button class="copy-btn"
+                onclick="copyPrice(this, ${salePrice})">
+                    کپی قیمت نهایی
+                </button>
+
+                <button class="copy-btn"
+                onclick="copyPrice(this, ${oldRounded})">
+                    کپی قیمت قبل تخفیف
+                </button>
+            `;
+
+            grid.appendChild(item);
+
+        });
+    });
+}
+
+function copyPrice(button, price) {
+
+    navigator.clipboard.writeText(
+        formatNumber(price) + " تومان"
+    ).then(() => {
+
+        const original = button.innerText;
+
+        button.innerText = "کپی شد! ✓";
+
+        setTimeout(() => {
+            button.innerText = original;
+        }, 1200);
+
+    }).catch(() => {
+        alert("کپی خودکار انجام نشد.");
+    });
+}
+
+function copyAll(id, type) {
+
+    const card = document.getElementById("perfume-" + id);
+
+    if (!card) return;
+
+    const numberInput = card.querySelector(".perfume-number");
+    const number = Number(numberInput.value);
+
+    const discount = Math.min(99, Math.max(0, Number(
+        card.querySelector(".perfume-discount").value
+    ) || 0));
+
+    if (numberInput.value === "" || number < 0) {
+        alert("ابتدا عدد ورودی را وارد کنید.");
+        return;
+    }
+
+    const name = card.querySelector(".perfume-name").value || "عطر";
+
+    const round = document.getElementById("rounding").checked;
+
+    let text = name + "\n";
+
+    sizes.forEach(size => {
+
+        let sale = calculatePrice(number, size);
+
+        if (round) {
+            sale = Math.round(sale / 1000) * 1000;
+        }
+
+        let old = discount > 0
+            ? sale / (1 - discount / 100)
+            : sale;
+
+        if (round) {
+            old = Math.round(old / 1000) * 1000;
+        }
+
+        const price = type === "sale" ? sale : old;
+
+        text += `${size.ml} میل: ${formatNumber(price)} تومان\n`;
+
+    });
+
+    navigator.clipboard.writeText(text)
+        .then(() => alert("تمام قیمت‌ها کپی شدند."))
+        .catch(() => alert("کپی خودکار انجام نشد."));
+}
+
+addPerfume();
+
+</script>
+
+</body>
+</html>
